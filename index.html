@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>ScanToPDF</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#2c3e50">
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+  <header>
+    <h1 data-i18n="app.title">ScanToPDF</h1>
+    <div class="header-controls">
+      <select id="lang-select" aria-label="Language">
+        <option value="en">English</option>
+        <option value="ar">العربية</option>
+        <option value="fr">Français</option>
+      </select>
+      <button id="install-btn" hidden data-i18n="app.install">Install App</button>
+    </div>
+  </header>
+
+  <main>
+    <!-- Image to PDF Section -->
+    <section id="image-section" class="panel">
+      <h2 data-i18n="image.heading">Images to PDF</h2>
+      <div id="drop-zone" class="drop-zone">
+        <p data-i18n="image.dropHint">Drag & drop images here, or</p>
+        <input type="file" id="file-input" accept="image/jpeg,image/jpg,image/png,image/webp" multiple>
+        <button id="add-more-btn" hidden data-i18n="image.addMore">Add More Images</button>
+      </div>
+      <div id="image-preview-list" class="preview-list"></div>
+      <div class="controls-row">
+        <span id="page-count" data-i18n="image.pageCount">Pages: 0</span>
+        <button id="clear-all-btn" data-i18n="image.clearAll">Clear All</button>
+      </div>
+      <div class="pdf-options">
+        <label><span data-i18n="pdf.pageSize">Page Size:</span>
+          <select id="page-size">
+            <option value="a4">A4</option>
+            <option value="a3">A3</option>
+            <option value="letter">Letter</option>
+            <option value="image" data-i18n="pdf.imageSize">Image Dimensions</option>
+          </select>
+        </label>
+        <label><span data-i18n="pdf.orientation">Orientation:</span>
+          <select id="orientation">
+            <option value="portrait" data-i18n="pdf.portrait">Portrait</option>
+            <option value="landscape" data-i18n="pdf.landscape">Landscape</option>
+          </select>
+        </label>
+        <label><span data-i18n="pdf.quality">Quality:</span>
+          <select id="quality">
+            <option value="0.92" data-i18n="pdf.qualityHigh">High</option>
+            <option value="0.75" data-i18n="pdf.qualityMedium">Medium</option>
+            <option value="0.5" data-i18n="pdf.qualityLow">Low</option>
+          </select>
+        </label>
+        <label><span data-i18n="pdf.filename">Filename:</span>
+          <input type="text" id="pdf-filename" value="document" placeholder="document">
+        </label>
+      </div>
+      <button id="generate-pdf-btn" class="primary-btn" data-i18n="pdf.generate">Generate PDF</button>
+    </section>
+
+    <!-- Camera Scanner Section -->
+    <section id="camera-section" class="panel">
+      <h2 data-i18n="camera.heading">Scan Document</h2>
+      <div id="camera-view-container">
+        <video id="camera-video" autoplay playsinline muted></video>
+        <canvas id="camera-overlay-canvas"></canvas>
+      </div>
+      <div class="camera-controls">
+        <button id="start-camera-btn" data-i18n="camera.start">Start Camera</button>
+        <button id="capture-btn" hidden data-i18n="camera.capture">Capture</button>
+        <button id="stop-camera-btn" hidden data-i18n="camera.cancel">Cancel</button>
+        <button id="switch-camera-btn" hidden data-i18n="camera.switch">Switch</button>
+      </div>
+      <div id="scan-preview-list" class="preview-list"></div>
+      <button id="scanned-to-pdf-btn" hidden class="primary-btn" data-i18n="camera.toPdf">Convert Scanned Pages to PDF</button>
+    </section>
+
+    <!-- Saved Documents Section -->
+    <section id="storage-section" class="panel">
+      <h2 data-i18n="storage.heading">Saved Documents</h2>
+      <div class="controls-row">
+        <input type="text" id="save-doc-name" placeholder="Document name" data-i18n-placeholder="storage.namePlaceholder">
+        <button id="save-doc-btn" data-i18n="storage.save">Save Current</button>
+      </div>
+      <ul id="saved-docs-list"></ul>
+    </section>
+  </main>
+
+  <!-- Crop Editor Modal -->
+  <div id="crop-modal" class="modal" hidden>
+    <div class="modal-content">
+      <h3 data-i18n="crop.title">Crop & Enhance</h3>
+      <div class="crop-canvas-wrapper">
+        <canvas id="crop-canvas"></canvas>
+      </div>
+      <div class="crop-controls">
+        <label><span data-i18n="crop.filter">Filter:</span>
+          <select id="filter-select">
+            <option value="original" data-i18n="crop.original">Original</option>
+            <option value="enhanced" data-i18n="crop.enhanced">Enhanced</option>
+            <option value="grayscale" data-i18n="crop.grayscale">Grayscale</option>
+            <option value="bw" data-i18n="crop.bw">Black & White</option>
+            <option value="highcontrast" data-i18n="crop.highContrast">High Contrast</option>
+          </select>
+        </label>
+        <button id="crop-reset-btn" data-i18n="crop.reset">Reset</button>
+        <button id="crop-apply-btn" class="primary-btn" data-i18n="crop.apply">Apply</button>
+        <button id="crop-cancel-btn" data-i18n="crop.cancel">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast" hidden></div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
